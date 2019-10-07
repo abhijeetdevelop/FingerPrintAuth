@@ -1,4 +1,5 @@
-﻿using Plugin.Fingerprint.Abstractions;
+﻿using Plugin.Fingerprint;
+using Plugin.Fingerprint.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,10 +22,10 @@ namespace LoginAuthSample
         {
             InitializeComponent();
         }
-        
+
         private async Task AuthenticationAsync(string reason, string cancel = null, string fallback = null, string tooFast = null)
         {
-            _cancel = swAutoCancel.IsToggled ? new CancellationTokenSource(TimeSpan.FromSeconds(10)) : new CancellationTokenSource();
+            _cancel = new CancellationTokenSource(TimeSpan.FromSeconds(10));
             var dialogConfig = new AuthenticationRequestConfiguration(reason)
             {
                 CancelTitle = cancel,
@@ -41,15 +42,23 @@ namespace LoginAuthSample
                 await DisplayAlert("CairnFM", "User is verified", "Ok");
             else
                 await DisplayAlert("CairnFM", "Unverified user", "Ok");
-                await DisplayAlert("CairnFM", "Unverified user", "Ok");
         }
+
 
         private async void OnAuthenticate(object sender, EventArgs e)
         {
-            if (FingerprintAvailability.Available == 0)
+            var availableResult = await CrossFingerprint.Current.GetAvailabilityAsync(false);
+
+            bool result = CrossFingerprint.Current.IsAvailableAsync().Result;
+            if (result)
                 await AuthenticationAsync("Check User", "cancel");
-            else
-                await App.Current.MainPage.DisplayAlert("Fingerprint Unavailable","Uh-oh your phone doesnt support it", "Ok");
+
+            if (availableResult.HasFlag(FingerprintAvailability.NoFingerprint) || availableResult.HasFlag(FingerprintAvailability.NoImplementation))
+                DependencyService.Get<ISettingsService>().OpenSettings();
+
+            if (availableResult.HasFlag(FingerprintAvailability.NoApi) || availableResult.HasFlag(FingerprintAvailability.Unknown) || availableResult.HasFlag(FingerprintAvailability.NoSensor))
+                await App.Current.MainPage.DisplayAlert("Fingerprint Unavailable", "Uh-oh your phone doesnt support it", "Ok");
         }
     }
 }
+

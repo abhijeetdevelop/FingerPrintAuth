@@ -6,12 +6,8 @@
              mc:Ignorable="d"
              x:Class="LoginAuthSample.MainPage">
 
-    <StackLayout Orientation="Vertical" Padding="10">
-        <Label x:Name="lblAuthenticationType"/>
-        <StackLayout Orientation="Horizontal">
-            <Switch x:Name="swAutoCancel"/>
-            <Label Text="Cancel after 10sec"/>
-        </StackLayout>
+    <StackLayout VerticalOptions="Center" Padding="10">
+        <Label x:Name="lblAuthenticationType"/>       
         <Button Text="Authenticate" Clicked="OnAuthenticate"/>
     </StackLayout>
 
