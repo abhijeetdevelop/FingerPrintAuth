@@ -26,6 +26,7 @@
     <MtouchArch>x86_64</MtouchArch>
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
+    <CodesignKey>iPhone Developer</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -127,7 +128,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\LoginAuthSample\LoginAuthSample.csproj">
-      <Project>{E8827E23-4147-480D-A6B2-61EAC1FCEB85}</Project>
+      <Project>{BA9F4BA8-090C-4572-A86C-85B5FD1368A7}</Project>
       <Name>LoginAuthSample</Name>
     </ProjectReference>
   </ItemGroup>

@@ -51,13 +51,22 @@ namespace LoginAuthSample
 
             bool result = CrossFingerprint.Current.IsAvailableAsync().Result;
             if (result)
+            {
                 await AuthenticationAsync("Check User", "cancel");
+                return;
+            }
 
-            if (availableResult.HasFlag(FingerprintAvailability.NoFingerprint) || availableResult.HasFlag(FingerprintAvailability.NoImplementation))
-                DependencyService.Get<ISettingsService>().OpenSettings();
-
-            if (availableResult.HasFlag(FingerprintAvailability.NoApi) || availableResult.HasFlag(FingerprintAvailability.Unknown) || availableResult.HasFlag(FingerprintAvailability.NoSensor))
+            if ((availableResult.HasFlag(FingerprintAvailability.NoApi) || availableResult.HasFlag(FingerprintAvailability.Unknown) )&& (!availableResult.HasFlag(FingerprintAvailability.Available)))
+            {
                 await App.Current.MainPage.DisplayAlert("Fingerprint Unavailable", "Uh-oh your phone doesnt support it", "Ok");
+                return;
+            }
+
+            if (availableResult.HasFlag(FingerprintAvailability.NoFingerprint) || availableResult.HasFlag(FingerprintAvailability.NoImplementation) && Device.RuntimePlatform != Device.iOS)
+            {
+                DependencyService.Get<ISettingsService>().OpenSettings();
+                return;
+            }            
         }
     }
 }

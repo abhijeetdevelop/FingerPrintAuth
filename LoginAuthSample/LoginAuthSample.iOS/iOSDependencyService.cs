@@ -14,7 +14,7 @@ namespace LoginAuthSample.iOS
     {
         public void OpenSettings()
         {
-            UIApplication.SharedApplication.OpenUrl(new NSUrl("app-settings:"));
+            UIApplication.SharedApplication.OpenUrl(new NSUrl("App-Prefs:root=Settings"));
         }
     }
 }
